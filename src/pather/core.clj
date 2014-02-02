@@ -2,7 +2,7 @@
   (:gen-class))
 
 (defn -main
-  "I don't do a whole lot ... yet."
+  "Initialise the app, get the UI built and begin the main loop"
   [& args]
   ;; work around dangerous default behaviour in Clojure
   (alter-var-root #'*read-eval* (constantly false))
