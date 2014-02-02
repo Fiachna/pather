@@ -1,6 +1,6 @@
 # pather
 
-FIXME: description
+A small pathfinding test application written in clojure
 
 ## Installation
 
@@ -24,12 +24,8 @@ FIXME: listing of options this app accepts.
 
 ...
 
-### Any Other Sections
-### That You Think
-### Might be Useful
-
 ## License
 
-Copyright © 2014 FIXME
+Copyright © 2014 Fiachna Carter
 
 Distributed under the Eclipse Public License, the same as Clojure.
