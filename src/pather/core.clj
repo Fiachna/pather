@@ -3,6 +3,7 @@
 (use 'seesaw.core)
 (use 'pather.ui.osx)
 (use 'pather.ui.view)
+(use 'pather.ui.actions)
 
 (defn -main
   "Initialise the app, get the UI built and begin the main loop"
