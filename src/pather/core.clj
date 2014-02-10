@@ -1,9 +1,14 @@
 (ns pather.core
   (:gen-class))
+(use 'seesaw.core)
+(use 'pather.ui.osx)
+(use 'pather.ui.view)
+(use 'pather.ui.actions)
 
 (defn -main
-  "I don't do a whole lot ... yet."
+  "Initialise the app, get the UI built and begin the main loop"
   [& args]
   ;; work around dangerous default behaviour in Clojure
   (alter-var-root #'*read-eval* (constantly false))
-  (println "Hello, World!"))
+  (create-window)
+  (build-ui))
