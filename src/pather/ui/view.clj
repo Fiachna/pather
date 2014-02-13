@@ -71,7 +71,7 @@
                            "[40px][80%][20%]"]
              :border (line-border :color "#aaaaaa")
              :items [[toolbar-top "spanx, grow"]
-                     [(scrollable viewport-canvas) "grow"]
+                     [viewport-canvas "grow"]
                      [(scrollable toolbar-right) "spany, grow"]
                      [(scrollable message-panel) "grow"]]))
 
