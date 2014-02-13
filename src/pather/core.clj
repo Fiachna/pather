@@ -1,7 +1,6 @@
 (ns pather.core
   (:gen-class))
 (use 'seesaw.core)
-(use 'pather.ui.osx)
 (use 'pather.ui.view)
 (use 'pather.ui.actions)
 (use 'pather.grid)
