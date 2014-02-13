@@ -43,38 +43,29 @@
             x (range cols)]
       (standard-draw-cell _ g bounds x y grid-atom))))
 
-(when-mouse-dragged viewport-canvas
-                    :start (fn [e]
-                             (let [p (.getPoint e)
-                                  coords (mouse-coords-to-grid [(.x p) (.y p)] [0 0 num-cols num-rows])]
-                              (logf message-panel "col: %s row: %s mouse-x: %d mouse-y %d\n" (str (coords :col)) (str (coords :row)) (.x p) (.y p))
-                              (modify-cell grid [(coords :col) (coords :row)] :traversable (not (cell-value grid [(coords :col) (coords :row)] :traversable)))
-                              (repaint! viewport-canvas)))
-                    :drag  (fn [e [dx dy]]
-                            (let [p (.getPoint e)
-                                  coords (mouse-coords-to-grid [(.x p) (.y p)] [0 0 num-cols num-rows])]
-                              (logf message-panel "col: %s row: %s mouse-x: %d mouse-y: %d\n" (str (coords :col)) (str (coords :row)) (.x p) (.y p))
-                              (modify-cell grid [(coords :col) (coords :row)] :traversable (not (cell-value grid [(coords :col) (coords :row)] :traversable)))
-                              (repaint! viewport-canvas))))
-
-(defn square-brush)
-(defn round-brush)
-
-(def brushes {
-              :square-brush nil
-              :round-brush nil})
-
-(def tools {
-            :obstacle nil
-            :discomfort nil
-            :eraser nil
-            :actor nil
-            :goal nil})
-
-(listen toolbar-right :mouse-released (fn [e] (logf message-panel "Selection is %s\n" (selection e))))
-(listen (select toolbar-top [:.mode]) :selection (fn [e] (if (selection e)
-                                                        (logf message-panel "To %s\n" (id-of e))
-                                                        (logf message-panel "From %s\n" (id-of e)))))
-(listen (select toolbar-top [:.view]) :selection (fn [e] (if (selection e)
-                                                          (logf message-panel "To %s\n" (id-of e))
-                                                          (logf message-panel "From %s\n" (id-of e)))))
+(defn add-behaviors [root]
+  (let [c (select root [:#canvas])
+        t (timer (fn [_]
+                   (repaint! c))
+                 :delay 16
+                 :start? true)
+        bounds (atom [0 0 num-cols num-rows])]
+    (config! c :paint #(draw-grid %1 %2 @bounds grid))
+    (when-mouse-dragged c
+                        :start (fn [e]
+                                 (let [p (.getPoint e)
+                                       coords (mouse-coords-to-grid [(.x p) (.y p)] @bounds)]
+                                   (logf message-panel "row: %d col %d mouse-x: %d mouse-y: %d\n" (coords :row) (coords :col) (.x p) (.y p))
+                                   (modify-cell grid [(coords :col) (coords :row)] :traversable true)))
+                        :drag (fn [e [dx dy]]
+                                (let [p (.getPoint e)
+                                      coords (mouse-coords-to-grid [(.x p) (.y p)] @bounds)]
+                                  (logf message-panel "row: %d col %d mouse-x: %d mouse-y %d\n" (coords :row) (coords :col) (.x p) (.y p))
+                                  (modify-cell grid [(coords :col) (coords :row)] :traversable false))))
+    (listen toolbar-right :mouse-released (fn [e] (logf message-panel "selection is %s\n" (selection e))))
+    (listen (select toolbar-top [:.mode]) :selection (fn [e] (if (selection e)
+                                                              (logf message-panel "To %s\n" (id-of e))
+                                                              (logf message-panel "From %s\n" (id-of e)))))
+    (listen (select toolbar-top [:.view]) :selection (fn [e] (if (selection e)
+                                                              (logf message-panel "To %s\n" (id-of e))
+                                                              (logf message-panel "From %s\n" (id-of e)))))))
